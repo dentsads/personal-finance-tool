@@ -20,31 +20,28 @@ services:
     restart: unless-stopped
 
   unzip-db:
-    image: alpine
-    restart: always
+    image: alpine    
     command:
       - /bin/sh
       - -c
       - |
         unzip -o /data/user-files/*.blob -d /data/db 
-        sleep 30
+        sleep 30        
     volumes:
       - ./data:/data
+    restart: always
 
   grafana:
     image: grafana/grafana-enterprise
-    container_name: grafana
-    restart: 'no'
+    container_name: grafana    
     ports:
       - '3000:3000'
     environment:
       - GF_INSTALL_PLUGINS=frser-sqlite-datasource
     volumes:
-      - grafana-storage:/var/lib/grafana
       - ./grafana-config/provisioning:/etc/grafana/provisioning
+      - ./grafana-config/dashboards:/var/lib/grafana/dashboards
       - ./data:/data
+    restart: unless-stopped
     depends_on:
       - unzip-db
-
-volumes:
-  grafana-storage: {}
