@@ -30,6 +30,157 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "green",
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "€"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.2+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "P0CD8666848BF286D"
+          },
+          "queryText": "SELECT SUM(amount/100.0) from v_transactions;",
+          "queryType": "table",
+          "rawQueryText": "SELECT SUM(amount/100.0) from v_transactions;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Net worth",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "frser-sqlite-datasource",
+        "uid": "P0CD8666848BF286D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "displayMode": "lcd",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.2.2+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "P0CD8666848BF286D"
+          },
+          "queryText": "select MIN(SUM(amount/100.0)/50000*100,100) as \"€50k\", MIN(SUM(amount/100.0)/100000*100,100) as \"€100k\", MIN(SUM(amount/100.0)/250000*100,100) as \"€250k\", MIN(SUM(amount/100.0)/500000*100,100) as \"€500k\" from v_transactions;",
+          "queryType": "table",
+          "rawQueryText": "select MIN(SUM(amount/100.0)/50000*100,100) as \"€50k\", MIN(SUM(amount/100.0)/100000*100,100) as \"€100k\", MIN(SUM(amount/100.0)/250000*100,100) as \"€250k\", MIN(SUM(amount/100.0)/500000*100,100) as \"€500k\" from v_transactions;",
+          "refId": "ABC",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Scorecard Net Worth",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "frser-sqlite-datasource",
+        "uid": "P0CD8666848BF286D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "palette-classic"
           },
           "custom": {
@@ -76,7 +227,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 2,
       "options": {
@@ -125,6 +276,112 @@
         "type": "frser-sqlite-datasource",
         "uid": "P0CD8666848BF286D"
       },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 10500,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "€"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Getilgt"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Offen"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.2.2+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "P0CD8666848BF286D"
+          },
+          "hide": false,
+          "queryText": "select 10500-SUM(amount/100.0) as Offen,SUM(amount/100.0) as Getilgt from v_transactions where account='8ce34628-6c31-4315-80bd-3fe4eef050d7' and category='f89fe60f-c0da-4015-b031-ccfd76255ccd' and substr(date, 1, 4)=substr(date(), 1, 4);",
+          "queryType": "table",
+          "rawQueryText": "select 10500-SUM(amount/100.0) as Offen,SUM(amount/100.0) as Getilgt from v_transactions where account='8ce34628-6c31-4315-80bd-3fe4eef050d7' and category='f89fe60f-c0da-4015-b031-ccfd76255ccd' and substr(date, 1, 4)=substr(date(), 1, 4);",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Jährliche Sondertilgung Ausreizung",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "frser-sqlite-datasource",
+        "uid": "P0CD8666848BF286D"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -150,7 +407,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 1,
       "options": {
@@ -237,6 +494,6 @@
   "timezone": "browser",
   "title": "Finanzen",
   "uid": "ce1kgyz385rswb",
-  "version": 6,
+  "version": 8,
   "weekStart": ""
 }
