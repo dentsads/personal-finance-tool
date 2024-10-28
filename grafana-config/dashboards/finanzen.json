@@ -221,7 +221,24 @@
           },
           "unit": "currencyEUR"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -242,7 +259,7 @@
           "showLegend": true
         },
         "orientation": "auto",
-        "showValue": "always",
+        "showValue": "never",
         "stacking": "normal",
         "tooltip": {
           "mode": "multi",
@@ -257,9 +274,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "P0CD8666848BF286D"
           },
-          "queryText": "SELECT \n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='5314f2dc-6129-4d47-a973-244a178fcffd') as Lebensmittelkauf,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='c8114bc7-9944-4b96-838d-d9e46796e7c0') as Bestellen\nFROM v_transactions t1\nGROUP BY Datum\nORDER BY date;",
+          "queryText": "SELECT \n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='5314f2dc-6129-4d47-a973-244a178fcffd') as Lebensmittelkauf,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='c8114bc7-9944-4b96-838d-d9e46796e7c0') as Bestellen\nFROM v_transactions t1\nWHERE substr(date, 1, 4)=substr(date(), 1, 4)\nGROUP BY Datum\nORDER BY date;",
           "queryType": "table",
-          "rawQueryText": "SELECT \n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='5314f2dc-6129-4d47-a973-244a178fcffd') as Lebensmittelkauf,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='c8114bc7-9944-4b96-838d-d9e46796e7c0') as Bestellen\nFROM v_transactions t1\nGROUP BY Datum\nORDER BY date;",
+          "rawQueryText": "SELECT \n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='5314f2dc-6129-4d47-a973-244a178fcffd') as Lebensmittelkauf,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='c8114bc7-9944-4b96-838d-d9e46796e7c0') as Bestellen\nFROM v_transactions t1\nWHERE substr(date, 1, 4)=substr(date(), 1, 4)\nGROUP BY Datum\nORDER BY date;",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -268,6 +285,22 @@
         }
       ],
       "title": "Essenskosten",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Lebensmittelkauf",
+                "Bestellen"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        }
+      ],
       "type": "barchart"
     },
     {
@@ -529,7 +562,24 @@
           },
           "unit": "€"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -565,9 +615,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "P0CD8666848BF286D"
           },
-          "queryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    -v_transactions.amount/100.0  as amount,\n    accounts.name account, \n    v_categories.name as category,\n    v_categories.is_income,\n    v_payees.name as payee,\n    v_transactions.notes,\n    v_transactions.date\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nJOIN \n    v_payees\nON \n    v_transactions.payee = v_payees.id\nJOIN \n    accounts\nON \n    v_transactions.account = accounts.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=substr(date(), 1, 4)\nORDER BY date;",
+          "queryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    -sum(v_transactions.amount/100.0)  as amount,\n    accounts.name account, \n    v_categories.name as category,\n    v_categories.is_income,\n    v_transactions.notes,\n    v_transactions.date\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nJOIN \n    accounts\nON \n    v_transactions.account = accounts.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=substr(date(), 1, 4)\ngroup by category, Datum\nORDER BY date;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    -v_transactions.amount/100.0  as amount,\n    accounts.name account, \n    v_categories.name as category,\n    v_categories.is_income,\n    v_payees.name as payee,\n    v_transactions.notes,\n    v_transactions.date\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nJOIN \n    v_payees\nON \n    v_transactions.payee = v_payees.id\nJOIN \n    accounts\nON \n    v_transactions.account = accounts.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=substr(date(), 1, 4)\nORDER BY date;",
+          "rawQueryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    -sum(v_transactions.amount/100.0)  as amount,\n    accounts.name account, \n    v_categories.name as category,\n    v_categories.is_income,\n    v_transactions.notes,\n    v_transactions.date\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nJOIN \n    accounts\nON \n    v_transactions.account = accounts.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=substr(date(), 1, 4)\ngroup by category, Datum\nORDER BY date;",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -581,12 +631,128 @@
           "id": "groupingToMatrix",
           "options": {
             "columnField": "category",
+            "emptyValue": "null",
             "rowField": "Datum",
             "valueField": "amount"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Altersvorsorge",
+                "MSCI-World",
+                "Rechtsschutzversicherung",
+                "Berufsunfähigkeitsvers.",
+                "KfZ-Haftpflichtversicherung Opel",
+                "KfZ-Haftpflichtversicherung Tiguan",
+                "Hausratsversicherung",
+                "KfZ-Reparaturen",
+                "Mobilfunkvertrag",
+                "Gemeinschaftskonto",
+                "Lebensmitteleinkäufe",
+                "Netflix",
+                "Tilgung+Zinsen",
+                "Urlaub",
+                "Sondertilgung",
+                "Sonstiges",
+                "Grundsteuer",
+                "Tanken",
+                "Instandhaltung/Reparatur",
+                "Abwasser",
+                "Bestellen+Restaurants",
+                "Taxis ENFIA",
+                "KfZ-Steuer Tiguan",
+                "Drogerie",
+                "Kreditkarte",
+                "Geschäftsreisen",
+                "Reisekrankenversicherung",
+                "Wohngebäudeversicherung"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": false
           }
         }
       ],
       "type": "barchart"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "frser-sqlite-datasource",
+        "uid": "P0CD8666848BF286D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "%"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^percentage$/",
+          "values": false
+        },
+        "showPercentChange": true,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.2+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "P0CD8666848BF286D"
+          },
+          "queryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    CASE \n        WHEN (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') IS NULL OR (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') IS NULL THEN 0\n        ELSE ROUND(((SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') * 1.0) / (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') * 100, 2)\n    END as percentage\nFROM v_transactions t1\nWHERE substr(date, 1, 4)=substr(date(), 1, 4) AND substr(date, 5, 2)!=substr(date(), 6, 2)\nGROUP BY Datum\nORDER BY date;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    CASE \n        WHEN (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') IS NULL OR (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') IS NULL THEN 0\n        ELSE ROUND(((SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') * 1.0) / (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') * 100, 2)\n    END as percentage\nFROM v_transactions t1\nWHERE substr(date, 1, 4)=substr(date(), 1, 4) AND substr(date, 5, 2)!=substr(date(), 6, 2)\nGROUP BY Datum\nORDER BY date;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Durchschnittliche Sparquote Trend",
+      "type": "stat"
     }
   ],
   "schemaVersion": 39,
@@ -602,6 +768,6 @@
   "timezone": "browser",
   "title": "Finanzen",
   "uid": "ce1kgyz385rswb",
-  "version": 2,
+  "version": 16,
   "weekStart": ""
 }
