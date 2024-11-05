@@ -83,9 +83,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "P0CD8666848BF286D"
           },
-          "queryText": "SELECT SUM(amount/100.0) from v_transactions;",
+          "queryText": "SELECT SUM(amount/100.0) from v_transactions where substr(date, 1, 4)<=\"$year\";",
           "queryType": "table",
-          "rawQueryText": "SELECT SUM(amount/100.0) from v_transactions;",
+          "rawQueryText": "SELECT SUM(amount/100.0) from v_transactions where substr(date, 1, 4)<=\"$year\";",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -159,9 +159,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "P0CD8666848BF286D"
           },
-          "queryText": "select MIN(SUM(amount/100.0)/50000*100,100) as \"€50k\", MIN(SUM(amount/100.0)/100000*100,100) as \"€100k\", MIN(SUM(amount/100.0)/250000*100,100) as \"€250k\", MIN(SUM(amount/100.0)/500000*100,100) as \"€500k\" from v_transactions;",
+          "queryText": "select MIN(SUM(amount/100.0)/50000*100,100) as \"€50k\", MIN(SUM(amount/100.0)/100000*100,100) as \"€100k\", MIN(SUM(amount/100.0)/250000*100,100) as \"€250k\", MIN(SUM(amount/100.0)/500000*100,100) as \"€500k\" from v_transactions where substr(date, 1, 4)<=\"$year\";",
           "queryType": "table",
-          "rawQueryText": "select MIN(SUM(amount/100.0)/50000*100,100) as \"€50k\", MIN(SUM(amount/100.0)/100000*100,100) as \"€100k\", MIN(SUM(amount/100.0)/250000*100,100) as \"€250k\", MIN(SUM(amount/100.0)/500000*100,100) as \"€500k\" from v_transactions;",
+          "rawQueryText": "select MIN(SUM(amount/100.0)/50000*100,100) as \"€50k\", MIN(SUM(amount/100.0)/100000*100,100) as \"€100k\", MIN(SUM(amount/100.0)/250000*100,100) as \"€250k\", MIN(SUM(amount/100.0)/500000*100,100) as \"€500k\" from v_transactions where substr(date, 1, 4)<=\"$year\";",
           "refId": "ABC",
           "timeColumns": [
             "time",
@@ -274,9 +274,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "P0CD8666848BF286D"
           },
-          "queryText": "SELECT \n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='5314f2dc-6129-4d47-a973-244a178fcffd') as Lebensmittelkauf,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='c8114bc7-9944-4b96-838d-d9e46796e7c0') as Bestellen\nFROM v_transactions t1\nWHERE substr(date, 1, 4)=substr(date(), 1, 4)\nGROUP BY Datum\nORDER BY date;",
+          "queryText": "SELECT \n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='5314f2dc-6129-4d47-a973-244a178fcffd') as Lebensmittelkauf,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='c8114bc7-9944-4b96-838d-d9e46796e7c0') as Bestellen\nFROM v_transactions t1\nWHERE substr(date, 1, 4)=\"$year\"\nGROUP BY Datum\nORDER BY date;",
           "queryType": "table",
-          "rawQueryText": "SELECT \n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='5314f2dc-6129-4d47-a973-244a178fcffd') as Lebensmittelkauf,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='c8114bc7-9944-4b96-838d-d9e46796e7c0') as Bestellen\nFROM v_transactions t1\nWHERE substr(date, 1, 4)=substr(date(), 1, 4)\nGROUP BY Datum\nORDER BY date;",
+          "rawQueryText": "SELECT \n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='5314f2dc-6129-4d47-a973-244a178fcffd') as Lebensmittelkauf,\n    (SELECT -SUM(amount/100.0) from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='c8114bc7-9944-4b96-838d-d9e46796e7c0') as Bestellen\nFROM v_transactions t1\nWHERE substr(date, 1, 4)=\"$year\"\nGROUP BY Datum\nORDER BY date;",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -615,9 +615,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "P0CD8666848BF286D"
           },
-          "queryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    -sum(v_transactions.amount/100.0)  as amount,\n    accounts.name account, \n    v_categories.name as category,\n    v_categories.is_income,\n    v_transactions.notes,\n    v_transactions.date\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nJOIN \n    accounts\nON \n    v_transactions.account = accounts.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=substr(date(), 1, 4)\ngroup by category, Datum\nORDER BY date;",
+          "queryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    -sum(v_transactions.amount/100.0)  as amount,\n    accounts.name account, \n    v_categories.name as category,\n    v_categories.is_income,\n    v_transactions.notes,\n    v_transactions.date\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nJOIN \n    accounts\nON \n    v_transactions.account = accounts.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=\"$year\"\ngroup by category, Datum\nORDER BY date;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    -sum(v_transactions.amount/100.0)  as amount,\n    accounts.name account, \n    v_categories.name as category,\n    v_categories.is_income,\n    v_transactions.notes,\n    v_transactions.date\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nJOIN \n    accounts\nON \n    v_transactions.account = accounts.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=substr(date(), 1, 4)\ngroup by category, Datum\nORDER BY date;",
+          "rawQueryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    -sum(v_transactions.amount/100.0)  as amount,\n    accounts.name account, \n    v_categories.name as category,\n    v_categories.is_income,\n    v_transactions.notes,\n    v_transactions.date\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nJOIN \n    accounts\nON \n    v_transactions.account = accounts.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=\"$year\"\ngroup by category, Datum\nORDER BY date;",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -886,9 +886,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "P0CD8666848BF286D"
           },
-          "queryText": "SELECT \n  (SELECT SUM(amount/100.0) from v_transactions where account='33fba22d-2bca-4e2c-aacc-f11818b9fb8c') as ETFs,\n  (SELECT SUM(amount/100.0) from v_transactions where account='2b078462-c6fe-4fa3-9608-263f6bff40c2') as bAV,\n  (SELECT SUM(amount/100.0) from v_transactions where account in ('485a9e8d-1476-4d31-b9c0-193443dc9978','2fbd0039-a275-4836-85c3-583c41ec5b1b', 'd05e55b2-d75d-459a-b85f-a262e5d79a54', '6d86b807-ab3a-43d9-aeb6-82b34da41aeb', '52473ef9-5805-442a-9f71-0f676bcb5fd6')) as 'Tagesgeld/Festgeld/Cash'    \nLIMIT 1;",
+          "queryText": "SELECT \n  (SELECT SUM(amount/100.0) from v_transactions where account='33fba22d-2bca-4e2c-aacc-f11818b9fb8c' and substr(date, 1, 4)<=\"$year\") as ETFs,\n  (SELECT SUM(amount/100.0) from v_transactions where account='2b078462-c6fe-4fa3-9608-263f6bff40c2' and substr(date, 1, 4)<=\"$year\") as bAV,\n  (SELECT SUM(amount/100.0) from v_transactions where account in ('485a9e8d-1476-4d31-b9c0-193443dc9978','2fbd0039-a275-4836-85c3-583c41ec5b1b', 'd05e55b2-d75d-459a-b85f-a262e5d79a54', '6d86b807-ab3a-43d9-aeb6-82b34da41aeb', '52473ef9-5805-442a-9f71-0f676bcb5fd6') and substr(date, 1, 4)<=\"$year\") as 'Tagesgeld/Festgeld/Cash'    \nLIMIT 1;",
           "queryType": "table",
-          "rawQueryText": "SELECT \n  (SELECT SUM(amount/100.0) from v_transactions where account='33fba22d-2bca-4e2c-aacc-f11818b9fb8c') as ETFs,\n  (SELECT SUM(amount/100.0) from v_transactions where account='2b078462-c6fe-4fa3-9608-263f6bff40c2') as bAV,\n  (SELECT SUM(amount/100.0) from v_transactions where account in ('485a9e8d-1476-4d31-b9c0-193443dc9978','2fbd0039-a275-4836-85c3-583c41ec5b1b', 'd05e55b2-d75d-459a-b85f-a262e5d79a54', '6d86b807-ab3a-43d9-aeb6-82b34da41aeb', '52473ef9-5805-442a-9f71-0f676bcb5fd6')) as 'Tagesgeld/Festgeld/Cash'    \nLIMIT 1;",
+          "rawQueryText": "SELECT \n  (SELECT SUM(amount/100.0) from v_transactions where account='33fba22d-2bca-4e2c-aacc-f11818b9fb8c' and substr(date, 1, 4)<=\"$year\") as ETFs,\n  (SELECT SUM(amount/100.0) from v_transactions where account='2b078462-c6fe-4fa3-9608-263f6bff40c2' and substr(date, 1, 4)<=\"$year\") as bAV,\n  (SELECT SUM(amount/100.0) from v_transactions where account in ('485a9e8d-1476-4d31-b9c0-193443dc9978','2fbd0039-a275-4836-85c3-583c41ec5b1b', 'd05e55b2-d75d-459a-b85f-a262e5d79a54', '6d86b807-ab3a-43d9-aeb6-82b34da41aeb', '52473ef9-5805-442a-9f71-0f676bcb5fd6') and substr(date, 1, 4)<=\"$year\") as 'Tagesgeld/Festgeld/Cash'    \nLIMIT 1;",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -903,7 +903,32 @@
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "2024",
+          "value": "2024"
+        },
+        "datasource": {
+          "type": "frser-sqlite-datasource",
+          "uid": "P0CD8666848BF286D"
+        },
+        "definition": "SELECT\n    substr(date, 1, 4) as Datum\nFROM v_transactions\nGROUP BY Datum;",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Jahr",
+        "multi": false,
+        "name": "year",
+        "options": [],
+        "query": "SELECT\n    substr(date, 1, 4) as Datum\nFROM v_transactions\nGROUP BY Datum;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 4,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -913,6 +938,6 @@
   "timezone": "browser",
   "title": "Finanzen",
   "uid": "ce1kgyz385rswb",
-  "version": 26,
+  "version": 35,
   "weekStart": ""
 }
