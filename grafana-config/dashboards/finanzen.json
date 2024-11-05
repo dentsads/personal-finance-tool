@@ -893,12 +893,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "yellow",
+                "value": 20
+              },
+              {
+                "color": "green",
+                "value": 30
               }
             ]
           },
@@ -1134,6 +1138,6 @@
   "timezone": "browser",
   "title": "Finanzen",
   "uid": "ce1kgyz385rswb",
-  "version": 42,
+  "version": 45,
   "weekStart": ""
 }
