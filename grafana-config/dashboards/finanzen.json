@@ -93,7 +93,7 @@
           ]
         }
       ],
-      "title": "Net worth",
+      "title": "Net worth $year",
       "type": "stat"
     },
     {
@@ -169,7 +169,7 @@
           ]
         }
       ],
-      "title": "Scorecard Net Worth",
+      "title": "Scorecard Net Worth $year",
       "type": "bargauge"
     },
     {
@@ -284,7 +284,7 @@
           ]
         }
       ],
-      "title": "Essenskosten",
+      "title": "Essenskosten $year",
       "transformations": [
         {
           "id": "calculateField",
@@ -396,9 +396,9 @@
             "uid": "P0CD8666848BF286D"
           },
           "hide": false,
-          "queryText": "select 10500-SUM(amount/100.0) as Offen,SUM(amount/100.0) as Getilgt from v_transactions where account='8ce34628-6c31-4315-80bd-3fe4eef050d7' and category='f89fe60f-c0da-4015-b031-ccfd76255ccd' and substr(date, 1, 4)=substr(date(), 1, 4);",
+          "queryText": "select 10500-SUM(amount/100.0) as Offen,SUM(amount/100.0) as Getilgt from v_transactions where account='8ce34628-6c31-4315-80bd-3fe4eef050d7' and category='f89fe60f-c0da-4015-b031-ccfd76255ccd' and substr(date, 1, 4)=\"$year\";",
           "queryType": "table",
-          "rawQueryText": "select 10500-SUM(amount/100.0) as Offen,SUM(amount/100.0) as Getilgt from v_transactions where account='8ce34628-6c31-4315-80bd-3fe4eef050d7' and category='f89fe60f-c0da-4015-b031-ccfd76255ccd' and substr(date, 1, 4)=substr(date(), 1, 4);",
+          "rawQueryText": "select 10500-SUM(amount/100.0) as Offen,SUM(amount/100.0) as Getilgt from v_transactions where account='8ce34628-6c31-4315-80bd-3fe4eef050d7' and category='f89fe60f-c0da-4015-b031-ccfd76255ccd' and substr(date, 1, 4)=\"$year\";",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -406,8 +406,204 @@
           ]
         }
       ],
-      "title": "Jährliche Sondertilgung Ausreizung",
+      "title": "Sondertilgung Ausreizung $year",
       "type": "gauge"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "frser-sqlite-datasource",
+        "uid": "P0CD8666848BF286D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "€"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 11,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 20,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "P0CD8666848BF286D"
+          },
+          "queryText": "SELECT\n    v_categories.name as category,\n    -sum(v_transactions.amount/100.0)  as amount\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=\"$year\"\ngroup by category\nORDER BY amount desc;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n    v_categories.name as category,\n    -sum(v_transactions.amount/100.0)  as amount\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nWHERE account='485a9e8d-1476-4d31-b9c0-193443dc9978' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != '5d31f7ee-0b38-47f5-bbe0-416d8d468a60' AND substr(date, 1, 4)=\"$year\"\ngroup by category\nORDER BY amount desc;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Kosten nach Kategorie Girokonto $year",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "frser-sqlite-datasource",
+        "uid": "P0CD8666848BF286D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "€"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 12,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 20,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "P0CD8666848BF286D"
+          },
+          "queryText": "SELECT\n    v_categories.name as category,\n    -sum(v_transactions.amount/100.0)  as amount\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nWHERE account='46746a7c-0eff-4702-a081-5cef893afce9' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != 'cf607948-1034-412a-8a21-72a9dc761c5f' AND amount < 0 AND substr(date, 1, 4)=\"$year\"\ngroup by category\nORDER BY amount desc;",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n    v_categories.name as category,\n    -sum(v_transactions.amount/100.0)  as amount\nFROM \n    v_transactions\nJOIN \n    v_categories \nON \n    v_transactions.category = v_categories.id\nWHERE account='46746a7c-0eff-4702-a081-5cef893afce9' AND is_income=0 AND category != '182c3391-7cb6-46a6-b382-0c58952bd354' AND category != 'cf607948-1034-412a-8a21-72a9dc761c5f' AND amount < 0 AND substr(date, 1, 4)=\"$year\"\ngroup by category\nORDER BY amount desc;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Kosten nach Kategorie Gemeinschaftskonto $year",
+      "type": "barchart"
     },
     {
       "datasource": {
@@ -440,7 +636,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 1,
       "options": {
@@ -585,7 +781,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 24
       },
       "id": 6,
       "options": {
@@ -625,7 +821,7 @@
           ]
         }
       ],
-      "title": "Monatliche Kosten",
+      "title": "Kosten nach Monat $year",
       "transformations": [
         {
           "id": "groupingToMatrix",
@@ -714,7 +910,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 32
       },
       "id": 7,
       "options": {
@@ -741,9 +937,9 @@
             "type": "frser-sqlite-datasource",
             "uid": "P0CD8666848BF286D"
           },
-          "queryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    CASE \n        WHEN (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') IS NULL OR (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') IS NULL THEN 0\n        ELSE ROUND(((SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') * 1.0) / (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') * 100, 2)\n    END as percentage\nFROM v_transactions t1\nWHERE substr(date, 1, 4) || substr(date, 5, 2) || substr(date, 7, 2) > substr(date('now','-12 months'), 1, 4) || substr(date('now','-12 months'), 6, 2) || substr(date('now','-12 months'), 9, 2)\nGROUP BY Datum\nORDER BY date;",
+          "queryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    CASE \n        WHEN (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') IS NULL OR (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') IS NULL THEN 0\n        ELSE ROUND(((SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') * 1.0) / (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') * 100, 2)\n    END as percentage\nFROM v_transactions t1\nWHERE substr(date, 1, 4) || substr(date, 5, 2) || substr(date, 7, 2) > substr(date('now','-6 months'), 1, 4) || substr(date('now','-6 months'), 6, 2) || substr(date('now','-6 months'), 9, 2)\nGROUP BY Datum\nORDER BY date;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    CASE \n        WHEN (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') IS NULL OR (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') IS NULL THEN 0\n        ELSE ROUND(((SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') * 1.0) / (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') * 100, 2)\n    END as percentage\nFROM v_transactions t1\nWHERE substr(date, 1, 4) || substr(date, 5, 2) || substr(date, 7, 2) > substr(date('now','-12 months'), 1, 4) || substr(date('now','-12 months'), 6, 2) || substr(date('now','-12 months'), 9, 2)\nGROUP BY Datum\nORDER BY date;",
+          "rawQueryText": "SELECT\n    substr('JanFebMarAprMayJunJulAugSepOctNovDec', 1 + 3*substr(date, 5, 2), -3) || ' ' || substr(date, 3, 2) as Datum,\n    CASE \n        WHEN (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') IS NULL OR (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') IS NULL THEN 0\n        ELSE ROUND(((SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='182c3391-7cb6-46a6-b382-0c58952bd354') * 1.0) / (SELECT amount/100.0 from v_transactions t2 where substr(t2.date, 1, 6)=substr(t1.date, 1, 6) and category='3c1699a5-522a-435e-86dc-93d900a14f0e') * 100, 2)\n    END as percentage\nFROM v_transactions t1\nWHERE substr(date, 1, 4) || substr(date, 5, 2) || substr(date, 7, 2) > substr(date('now','-6 months'), 1, 4) || substr(date('now','-6 months'), 6, 2) || substr(date('now','-6 months'), 9, 2)\nGROUP BY Datum\nORDER BY date;",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -751,7 +947,7 @@
           ]
         }
       ],
-      "title": "Durchschnittliche Quote Sparen/Gehalt Trend",
+      "title": "Durchschnittliche Quote Sparen/Gehalt Trend 6 Monate",
       "type": "stat"
     },
     {
@@ -785,7 +981,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 32
       },
       "id": 10,
       "options": {
@@ -822,7 +1018,7 @@
           ]
         }
       ],
-      "title": "Durchschnittliche Kosten",
+      "title": "Durchschnittliche Kosten 12 Monate",
       "type": "stat"
     },
     {
@@ -853,7 +1049,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 40
       },
       "id": 9,
       "options": {
@@ -896,7 +1092,7 @@
           ]
         }
       ],
-      "title": "Asset Allocation",
+      "title": "Asset Allocation $year",
       "type": "piechart"
     }
   ],
@@ -938,6 +1134,6 @@
   "timezone": "browser",
   "title": "Finanzen",
   "uid": "ce1kgyz385rswb",
-  "version": 35,
+  "version": 42,
   "weekStart": ""
 }
